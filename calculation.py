@@ -1,10 +1,14 @@
-from random import randrange
+import random
+#from docx import Document
 
 
 class Calculation:
     max = 5
     addAmount = 50
     minusAmount = 50
+    addList = []
+    minusList = []
+    ITEM_LEN = 37
 
     def __init__(self, max=5, addAmount=50, minusAmount=50):
         self.max = max
@@ -12,32 +16,33 @@ class Calculation:
         self.minusAmount = minusAmount
 
     def add(self):
-        i = 0
-        lastPart1 = -1
-        lastPart2 = -1
-        while i < self.addAmount:
-            part1 = randrange(self.max+1)
-            delta = self.max - part1
-            part2 = randrange(0, delta+1)
-            if (part1 != lastPart1) \
-                and (part1 != lastPart2) \
-                and (part2 != lastPart1) \
-                and (part2 != lastPart2):
-                print(f'{part1} + {part2} =                    ')
-                lastPart1 = part1
-                lastPart2 = part2
-                i += 1
+        candidates = set()
+        for i in range(0, self.max+1):
+            j = self.max - i
+            for k in range(0, j+1):
+                candidates.add(str(i)+' + '+str(k)+' =')
+        #print(candidates)
+        self.addList = random.sample(candidates, k=self.addAmount)
 
     def minus(self):
+        candidates = set()
+        for i in range(0, self.max+1):
+            for j in range(0, i+1):
+                candidates.add(str(i) + ' - ' + str(j) + ' =')
+        #print(candidates)
+        self.minusList = random.sample(candidates, k=self.minusAmount)
+
+    def print(self):
+        arr = self.addList + self.minusList
+        arr = random.sample(arr, len(arr))
         i = 0
-        lastNum1 = -1
-        lastNum2 = -1
-        while i < self.minusAmount:
-            num1 = randrange(self.max + 1)
-            num2 = randrange(0, num1 + 1)
-            if (num1 != lastNum1) \
-                    and (num2 != lastNum2):
-                print(f'{num1} - {num2} =')
-                lastNum1 = num1
-                lastNum2 = num2
+        line = ''
+        for item in arr:
+            line += item + '                 \t'
+            if 3 == i:
+                print(line)
+                print()
+                i = 0
+                line = ''
+            else:
                 i += 1
