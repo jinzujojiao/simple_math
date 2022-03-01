@@ -1,5 +1,8 @@
+import os
 import random
-#from docx import Document
+from docx import Document
+from docx.shared import Pt
+import time
 
 
 class Calculation:
@@ -32,17 +35,31 @@ class Calculation:
         #print(candidates)
         self.minusList = random.sample(candidates, k=self.minusAmount)
 
-    def print(self):
+    def generate_doc(self):
         arr = self.addList + self.minusList
         arr = random.sample(arr, len(arr))
+        filename = os.path.join('output', str(time.time()) + '.docx')
+        print('--- Start generation of doc ', filename, '---')
+        doc = Document()
+        p = doc.add_paragraph()
+        p.paragraph_format.line_spacing = 0.95
         i = 0
-        line = ''
+        text = ''
         for item in arr:
-            line += item + '                 \t'
+            text += item + '                 \t'
             if 3 == i:
-                print(line)
-                print()
+                print(text)
+                run = p.add_run()
+                font = run.font
+                font.name = 'Times New Roman'
+                font.size = Pt(12)
+                run.add_text(text)
+                run.add_break()
+                run.add_break()
                 i = 0
-                line = ''
+                text = ''
             else:
                 i += 1
+        doc.save(filename)
+        print('--- Complete generation of doc ', filename, '---')
+

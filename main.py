@@ -15,7 +15,7 @@ def main(argv):
         cal = Calculation(max, addAmount, minusAmount)
         cal.add()
         cal.minus()
-        cal.print()
+        cal.generate_doc()
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
